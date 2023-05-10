@@ -124,7 +124,15 @@ class Screen(Brick, Ball):
 class Engine(Screen):
     def __init__(self) -> None:
         super().__init__() 
+        self.game_start = False
     
+    def start(self):
+        for event in py.event.get():
+            if event.type == py.KEYDOWN:
+                if event.key == py.K_SPACE:
+                    self.ball.y -= 1
+                    print(self.ball.center) 
+
     def play(self):
         global screen
         while True:
@@ -132,20 +140,33 @@ class Engine(Screen):
                 if event.type == py.QUIT:
                     py.quit()
                     exit()
-                    
+
+                if event.type == py.KEYDOWN:
+                    if event.key == py.K_ESCAPE:
+                        py.quit()
+                        exit()
+
+                    if event.key == py.K_SPACE:
+                        self.game_start = True
+                        
+
                 if event.type == py.VIDEORESIZE:
                     self.new_size = event.size 
                     screen = py.display.set_mode(self.new_size, py.RESIZABLE)
                     screen.fill((111,169,196))
                     super().screenChange(self.new_size)
 
+            if self.game_start:
+                self.ball.y -= 1   
+
             super().brickCreate()
 
-            self.ball.x -= 10
+            self.start()
+
             self.allBuilt()
            
             py.display.update()
-            Clock.tick(20)
+            Clock.tick(60)
 
 
 a = Engine()
