@@ -126,12 +126,14 @@ class Engine(Screen):
         super().__init__() 
         self.game_start = False
     
-    def start(self):
-        for event in py.event.get():
-            if event.type == py.KEYDOWN:
-                if event.key == py.K_SPACE:
-                    self.ball.y -= 1
-                    print(self.ball.center) 
+    def collide(self):
+    
+        for i in self.brick_wall:
+            for j in i:
+                if j.collidepoint(self.ball.x, self.ball.y):
+                    i.remove(j)
+                    self.ball.x = 100
+
 
     def play(self):
         global screen
@@ -149,6 +151,11 @@ class Engine(Screen):
                     if event.key == py.K_SPACE:
                         self.game_start = True
                         
+                    if event.key == py.K_LEFT:
+                        self.floor.x -= 30
+                    
+                    if event.key == py.K_RIGHT:
+                        self.floor.x += 30
 
                 if event.type == py.VIDEORESIZE:
                     self.new_size = event.size 
@@ -157,11 +164,15 @@ class Engine(Screen):
                     super().screenChange(self.new_size)
 
             if self.game_start:
-                self.ball.y -= 1   
+                self.ball.y -= 5
+            
+            if self.ball.y <=0:
+                self.ball.y += 5
+            
 
             super().brickCreate()
 
-            self.start()
+            self.collide()
 
             self.allBuilt()
            
