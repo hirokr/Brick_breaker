@@ -87,6 +87,7 @@ class Screen(Brick, Ball):
         self.f_y = 700
 
     def smallScreen(self):
+
         #Bricks
         self.b_width = WINS[0]/6 - 11
         self.b_left = WINS[0]/6 - .33
@@ -102,6 +103,7 @@ class Screen(Brick, Ball):
         self.ball_h_w = 15
         self.ball_x = 345
         self.ball_y = 515
+    
     def screenChange(self,size):
         
         if size[0] > 800:
@@ -112,16 +114,25 @@ class Screen(Brick, Ball):
         super().bricks()
         super().ballFloor()
         
+    def allBuilt(self):
+        screen.fill((111,169,196))
+        py.draw.rect(screen, 'black', self.ball)
+        super().brickCreate()
+        py.draw.rect(screen, 'pink', self.floor)
+
+
 class Engine(Screen):
     def __init__(self) -> None:
-        super().__init__()
-        self.game = True 
+        super().__init__() 
     
     def play(self):
-        while self.game:
+        global screen
+        while True:
             for event in py.event.get():
                 if event.type == py.QUIT:
-                    self.game = False
+                    py.quit()
+                    exit()
+                    
                 if event.type == py.VIDEORESIZE:
                     self.new_size = event.size 
                     screen = py.display.set_mode(self.new_size, py.RESIZABLE)
@@ -130,8 +141,11 @@ class Engine(Screen):
 
             super().brickCreate()
 
+            self.ball.x -= 10
+            self.allBuilt()
+           
             py.display.update()
-            Clock.tick(60)
+            Clock.tick(20)
 
 
 a = Engine()
