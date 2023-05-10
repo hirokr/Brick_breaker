@@ -112,7 +112,6 @@ class Screen(Brick, Ball):
         super().bricks()
         super().ballFloor()
         
-        
 class Engine(Screen):
     def __init__(self) -> None:
         super().__init__()
