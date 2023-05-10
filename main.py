@@ -14,9 +14,13 @@ screen.fill((111,169,196))
 
 class Screen:
     def __init__(self) -> None:
-        self.ball = py.draw.circle(surface=screen, color='black',center=(100,100),radius=10)
-        self.brick = py.draw.line(screen, 'yellow', (500,200), (650,200), 30)
+        self.ball = py.Rect(100,50,10, 10)
+        self.brick = py.Rect(100,160,200, 30)
+        py.draw.rect(screen, 'black', self.ball)
+        py.draw.rect(screen, 'yellow', self.brick)
         
+
+
 class Engine(Screen):
     def __init__(self) -> None:
         super().__init__()
